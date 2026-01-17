@@ -1,0 +1,31 @@
+name: Build Next.js for Hostinger
+
+on:
+  push:
+    branches: [ main ] # Jab bhi aap main branch par code bhenjenge ye chal parega
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Project
+        run: npm run build
+        env:
+          NEXT_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_URL }}
+
+      - name: Upload Build Folder
+        uses: actions/upload-artifact@v3
+        with:
+          name: hostinger-ready-files
+          path: out/ # Agar aapne next.config mein export set kiya hai
